@@ -82,6 +82,7 @@ class _VisualizerPanelState extends State<VisualizerPanel> {
           const SizedBox(height: 14),
           RepaintBoundary(
             child: SingleChildScrollView(
+              primary: false,
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.zero,
               child: grid,

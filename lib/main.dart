@@ -179,46 +179,49 @@ class _CipherForgeScreenState extends State<CipherForgeScreen>
                     );
 
                 return SingleChildScrollView(
+                  primary: false,
                   padding: isDesktop
                       ? const EdgeInsets.all(32.0)
                       : const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const HeaderPanel(),
-                      if (isDesktop)
-                        const SizedBox(height: 32)
-                      else
-                        const SizedBox(height: 16),
-                      if (isDesktop)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: settingsPanel),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              flex: 2,
-                              child: Column(
-                                children: [
-                                  passwordPanel,
-                                  const SizedBox(height: 16),
-                                  visualizer,
-                                ],
+                  child: RepaintBoundary(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const HeaderPanel(),
+                        if (isDesktop)
+                          const SizedBox(height: 32)
+                        else
+                          const SizedBox(height: 16),
+                        if (isDesktop)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(child: settingsPanel),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    passwordPanel,
+                                    const SizedBox(height: 16),
+                                    visualizer,
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      else
-                        Column(
-                          children: [
-                            passwordPanel,
-                            const SizedBox(height: 8),
-                            settingsPanel,
-                            const SizedBox(height: 8),
-                            visualizer,
-                          ],
-                        ),
-                    ],
+                            ],
+                          )
+                        else
+                          Column(
+                            children: [
+                              passwordPanel,
+                              const SizedBox(height: 8),
+                              settingsPanel,
+                              const SizedBox(height: 8),
+                              visualizer,
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 );
               },
