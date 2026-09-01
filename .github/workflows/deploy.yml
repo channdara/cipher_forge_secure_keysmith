@@ -3,10 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Triggers the workflow on push to the main branch
+      - main
 
 permissions:
-  contents: write # Required to push to the gh-pages branch
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -19,7 +19,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.47.1' # Matches the minimum SDK version in pubspec.yaml. Change if you upgrade Flutter version.
+          flutter-version: '3.47.1'
           channel: 'stable'
           cache: true
 
@@ -27,23 +27,11 @@ jobs:
         run: flutter pub get
 
       - name: Build Web
-        # =========================================================================
-        # MANUAL CHANGE REQUIRED:
-        # -------------------------------------------------------------------------
-        # By default, this is set to "/password_generator/" under the assumption
-        # that your GitHub repository name is "password_generator".
-        #
-        # 1. If your GitHub repository name is different, change "/password_generator/"
-        #    to "/<your-repo-name>/". (e.g., "/my-flutter-app/")
-        # 2. If you are deploying to a custom domain or a user page (e.g., username.github.io),
-        #    change it to "/".
-        # Note: The path MUST start and end with a forward slash "/".
-        # =========================================================================
-        run: flutter build web --release --base-href "/cipher_forge_secure_keysmith/"
+        run: flutter build web --wasm --release --base-href "/cipher_forge_secure_keysmith/"
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/web # The folder the action should deploy (Flutter's web output folder).
-          branch: gh-pages # The branch the action should deploy to.
-          clean: true # Automatically remove deleted files from the deployment branch
+          folder: build/web
+          branch: gh-pages
+          clean: true
