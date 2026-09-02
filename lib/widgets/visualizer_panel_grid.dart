@@ -91,20 +91,19 @@ class VisualizerGridCell extends StatelessWidget {
       width: 24,
       height: 24,
       margin: const EdgeInsets.symmetric(horizontal: 2),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: isChosen ? AppColors.secondary : AppColors.unchosenBackground,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: isChosen ? AppColors.chosenBorder : AppColors.unchosenBorder,
-        ),
+        border: isChosen
+            ? Border.all(color: AppColors.chosenBorder)
+            : null,
       ),
-      child: Center(
-        child: Text(
-          char,
-          style: AppTextStyles.visualizerGridChar(
-            isChosen: isChosen,
-            charColor: charColor,
-          ),
+      child: Text(
+        char,
+        style: AppTextStyles.visualizerGridChar(
+          isChosen: isChosen,
+          charColor: charColor,
         ),
       ),
     );

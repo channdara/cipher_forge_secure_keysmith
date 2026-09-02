@@ -21,38 +21,13 @@ class VisualizerPanel extends StatefulWidget {
 }
 
 class _VisualizerPanelState extends State<VisualizerPanel> {
-  final ScrollController _verticalController = ScrollController();
-  Widget? _cachedGrid;
-
-  @override
-  void dispose() {
-    _verticalController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(VisualizerPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // If the underlying password data has not changed, we can keep the cached grid.
-    // Since the password generator produces new lists on each generation, checking
-    // identical is a fast and reliable O(1) check.
-    if (!identical(
-          widget.alternativePasswords,
-          oldWidget.alternativePasswords,
-        ) ||
-        !identical(widget.chosenIndices, oldWidget.chosenIndices)) {
-      _cachedGrid = null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.alternativePasswords.isEmpty) {
       return const SizedBox();
     }
 
-    // Re-use cached grid if possible to avoid rebuilding 576+ widgets on every resize/rebuild
-    final Widget grid = _cachedGrid ??= VisualizerPanelGrid(
+    final Widget grid = VisualizerPanelGrid(
       alternativePasswords: widget.alternativePasswords,
       chosenIndices: widget.chosenIndices,
     );
@@ -83,6 +58,7 @@ class _VisualizerPanelState extends State<VisualizerPanel> {
           RepaintBoundary(
             child: SingleChildScrollView(
               primary: false,
+              physics: const ClampingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.zero,
               child: grid,

@@ -73,30 +73,6 @@ class _SettingsPanelState extends State<SettingsPanel> {
   }
 
   @override
-  void didUpdateWidget(SettingsPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.length != oldWidget.length) {
-      _localLength = widget.length;
-      final int? parsed = int.tryParse(_controller.text);
-      if (parsed != _localLength) {
-        _updateControllerText(_localLength.toString());
-      }
-    }
-    if (widget.useUppercase != oldWidget.useUppercase) {
-      _localUseUppercase = widget.useUppercase;
-    }
-    if (widget.useLowercase != oldWidget.useLowercase) {
-      _localUseLowercase = widget.useLowercase;
-    }
-    if (widget.useDigits != oldWidget.useDigits) {
-      _localUseDigits = widget.useDigits;
-    }
-    if (widget.useSymbols != oldWidget.useSymbols) {
-      _localUseSymbols = widget.useSymbols;
-    }
-  }
-
-  @override
   void dispose() {
     _debounceTimer?.cancel();
     _focusNode.removeListener(_onFocusChange);
