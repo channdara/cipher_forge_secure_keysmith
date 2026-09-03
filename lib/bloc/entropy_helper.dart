@@ -10,7 +10,6 @@ enum PasswordStrength { none, veryWeak, weak, medium, strong, veryStrong }
 class EntropyHelper {
   EntropyHelper._();
 
-  /// Calculates the pool size based on selected options.
   static int getPoolSize({
     required bool useUppercase,
     required bool useLowercase,
@@ -33,7 +32,6 @@ class EntropyHelper {
     return size;
   }
 
-  /// Calculates the Shannon entropy in bits: E = L * log2(P)
   static double calculateEntropy(int length, int poolSize) {
     if (length <= 0 || poolSize <= 0) {
       return 0.0;
@@ -41,7 +39,6 @@ class EntropyHelper {
     return length * (log(poolSize) / ln2);
   }
 
-  /// Returns the PasswordStrength category based on the entropy score.
   static PasswordStrength getStrength(double entropy) {
     if (entropy == 0) {
       return PasswordStrength.none;
@@ -61,7 +58,6 @@ class EntropyHelper {
     return PasswordStrength.veryStrong;
   }
 
-  /// Returns the color for PasswordStrength.
   static Color getStrengthColor(PasswordStrength strength) {
     return switch (strength) {
       PasswordStrength.none => Colors.grey,
@@ -73,7 +69,6 @@ class EntropyHelper {
     };
   }
 
-  /// Returns a human-friendly string for the strength category.
   static String getStrengthLabel(PasswordStrength strength) {
     switch (strength) {
       case PasswordStrength.none:
@@ -91,16 +86,11 @@ class EntropyHelper {
     }
   }
 
-  /// Estimates the time to crack the password.
-  /// Assumes a supercomputer array executing 10 billion (1e10) attempts per second.
   static String getCrackTimeEstimate(double entropy) {
     if (entropy <= 0) {
       return 'N/A';
     }
 
-    // log2(T) = Entropy - 1 - log2(1e10)
-    // log2(1e10) is approx 33.219280948873624
-    // So log2(T) = Entropy - 34.21928
     final double log2Seconds = entropy - 34.21928;
 
     if (log2Seconds < 0) {
@@ -128,7 +118,7 @@ class EntropyHelper {
       return '${days.toStringAsFixed(0)} days';
     }
 
-    final double months = days / 30.437; // average month length
+    final double months = days / 30.437;
     if (months < 12) {
       return '${months.toStringAsFixed(0)} months';
     }

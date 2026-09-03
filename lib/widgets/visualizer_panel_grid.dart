@@ -50,7 +50,7 @@ class VisualizerGridRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 32,
-            child: Text(
+            child: SelectableText(
               '#${(rowIndex + 1).toString().padLeft(2, '0')}',
               textAlign: TextAlign.end,
               style: AppTextStyles.visualizerRowIndex,
@@ -95,11 +95,9 @@ class VisualizerGridCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: isChosen ? AppColors.secondary : AppColors.unchosenBackground,
         borderRadius: BorderRadius.circular(4),
-        border: isChosen
-            ? Border.all(color: AppColors.chosenBorder)
-            : null,
+        border: isChosen ? Border.all(color: AppColors.chosenBorder) : null,
       ),
-      child: Text(
+      child: SelectableText(
         char,
         style: AppTextStyles.visualizerGridChar(
           isChosen: isChosen,

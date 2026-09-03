@@ -23,7 +23,7 @@ class AppColors {
   static const Color insightsSubtitle = Color(0xFF94A3B8);
   static const Color legendText = Color(0xFF64748B);
 
-  // Glass Card
+  // Custom Card
   static const Color glassCardBackground = Color(0xB2162032);
   static const Color glassCardBorder = Color(0xCC334155);
   static const Color glassCardShadow = Color(0x4D000000);

@@ -89,7 +89,10 @@ class _Item extends StatelessWidget {
       children: [
         Icon(Icons.circle_rounded, color: color, size: 10),
         const SizedBox(width: 8),
-        Text('$label: $count', style: AppTextStyles.s14BoldWith(color: color)),
+        SelectableText(
+          '$label: $count',
+          style: AppTextStyles.s14BoldWith(color: color),
+        ),
       ],
     );
   }

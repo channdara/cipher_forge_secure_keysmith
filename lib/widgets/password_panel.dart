@@ -55,7 +55,7 @@ class PasswordPanel extends StatelessWidget {
                 children: [
                   Icon(Icons.vpn_key_rounded, color: Colors.cyan),
                   SizedBox(width: 16),
-                  Text('Password', style: AppTextStyles.cardTitle),
+                  SelectableText('Password', style: AppTextStyles.cardTitle),
                 ],
               ),
               if (_hasPassword)
@@ -69,7 +69,7 @@ class PasswordPanel extends StatelessWidget {
                       horizontal: 10,
                       vertical: 4,
                     ),
-                    child: Text(
+                    child: SelectableText(
                       EntropyHelper.getStrengthLabel(strength),
                       style: AppTextStyles.outputStrengthBadge(strengthColor),
                     ),
@@ -91,7 +91,7 @@ class PasswordPanel extends StatelessWidget {
                 child: FadeTransition(
                   opacity: fadeInController,
                   child: !_hasPassword
-                      ? const Text(
+                      ? const SelectableText(
                           'Set options to generate',
                           style: AppTextStyles.outputPlaceholder,
                           textAlign: TextAlign.center,
@@ -153,13 +153,13 @@ class PasswordPanel extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                SelectableText(
                   'Entropy: ~${entropy.toStringAsFixed(0)} bits',
                   style: AppTextStyles.outputEntropy,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
+                  child: SelectableText(
                     'Crack Time: ~$crackTime',
                     style: AppTextStyles.outputCrackTime,
                     textAlign: TextAlign.end,

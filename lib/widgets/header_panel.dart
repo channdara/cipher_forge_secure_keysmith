@@ -36,15 +36,21 @@ class HeaderPanel extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('CIPHERFORGE', style: AppTextStyles.headerTitle),
-                  Text('SECURE KEYSMITH', style: AppTextStyles.headerSubtitle),
+                  SelectableText(
+                    'CIPHERFORGE',
+                    style: AppTextStyles.headerTitle,
+                  ),
+                  SelectableText(
+                    'SECURE KEYSMITH',
+                    style: AppTextStyles.headerSubtitle,
+                  ),
                 ],
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        const Text(
+        const SelectableText(
           'A cryptographically secure password generator based on the customized matrix algorithm with cryptographically secure random number generation to construct extremely secure passwords.',
           style: AppTextStyles.headerDescription,
         ),

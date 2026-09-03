@@ -46,19 +46,23 @@ class _VisualizerPanelState extends State<VisualizerPanel> {
             children: [
               Icon(Icons.grid_view_rounded, color: Colors.cyan),
               SizedBox(width: 16),
-              Text('Algorithm Insights', style: AppTextStyles.cardTitle),
+              SelectableText(
+                'Algorithm Insights',
+                style: AppTextStyles.cardTitle,
+              ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          SelectableText(
             'The matrix generates $len intermediate keys of length $len. One random character from each row forms the master key. The violet cells represent characters selected for the Master Key',
             style: AppTextStyles.visualizerInsight,
           ),
           const SizedBox(height: 14),
           RepaintBoundary(
             child: SingleChildScrollView(
-              primary: false,
-              physics: const ClampingScrollPhysics(),
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.zero,
               child: grid,

@@ -174,14 +174,17 @@ class _SettingsPanelState extends State<SettingsPanel> {
             children: [
               Icon(Icons.tune_rounded, color: Colors.cyan),
               SizedBox(width: 16),
-              Text('Settings', style: AppTextStyles.cardTitle),
+              SelectableText('Settings', style: AppTextStyles.cardTitle),
             ],
           ),
           const SizedBox(height: 32),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Length', style: AppTextStyles.configLengthLabel),
+              const SelectableText(
+                'Length',
+                style: AppTextStyles.configLengthLabel,
+              ),
               SizedBox(
                 height: 40,
                 child: Row(
@@ -362,18 +365,16 @@ class _SettingsPanelState extends State<SettingsPanel> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Flexible(
-                  child: Text(
+                  child: SelectableText(
                     'Pool Size',
                     style: AppTextStyles.configPoolSizeLabel,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Flexible(
-                  child: Text(
+                  child: SelectableText(
                     '$_localPoolSize characters',
                     style: AppTextStyles.configPoolSizeValue,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

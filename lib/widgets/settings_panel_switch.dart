@@ -25,11 +25,10 @@ class SettingsPanelSwitch extends StatelessWidget {
       elevation: 0,
       clipBehavior: Clip.hardEdge,
       child: SwitchListTile(
-        title: Text(title, style: AppTextStyles.configSwitchTitle),
-        subtitle: Text(
+        title: SelectableText(title, style: AppTextStyles.configSwitchTitle),
+        subtitle: SelectableText(
           subtitle,
           style: AppTextStyles.configSwitchSubtitle,
-          overflow: TextOverflow.ellipsis,
         ),
         value: value,
         onChanged: onChanged,

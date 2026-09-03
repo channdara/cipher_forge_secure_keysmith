@@ -84,8 +84,6 @@ class PasswordGeneratorState {
   final bool useSymbols;
   final PasswordResult passwordResult;
   final bool isCopied;
-
-  // Derived properties
   final int poolSize;
   final double entropy;
   final PasswordStrength strength;
