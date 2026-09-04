@@ -54,15 +54,13 @@ class _VisualizerPanelState extends State<VisualizerPanel> {
           ),
           const SizedBox(height: 8),
           SelectableText(
-            'The matrix generates $len intermediate keys of length $len. One random character from each row forms the master key. The violet cells represent characters selected for the Master Key',
+            'The matrix generates $len intermediate keys of length $len. One random character from each row forms the master key. The violet cells represent characters selected for the Master Key.',
             style: AppTextStyles.visualizerInsight,
           ),
           const SizedBox(height: 14),
           RepaintBoundary(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.zero,
               child: grid,

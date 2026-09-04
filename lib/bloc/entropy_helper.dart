@@ -138,9 +138,12 @@ class EntropyHelper {
     }
   }
 
-  static final Set<String> _symbolSet = PasswordGenerator.symbolChars
-      .split('')
+  static final Set<int> _symbolCodeUnits = PasswordGenerator
+      .symbolChars
+      .codeUnits
       .toSet();
+
+  static bool isSymbolCode(int code) => _symbolCodeUnits.contains(code);
 
   static Color characterColor(String char) {
     if (char.isEmpty) {
@@ -159,7 +162,7 @@ class EntropyHelper {
     }
 
     // Check for symbol: !@#$%^&*()-_=+[]{};:',.<>?/~
-    if (_symbolSet.contains(char)) {
+    if (_symbolCodeUnits.contains(code)) {
       return AppColors.charSymbol;
     }
 

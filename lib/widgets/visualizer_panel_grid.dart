@@ -47,27 +47,17 @@ class VisualizerGridRow extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
-        children: [
-          SizedBox(
-            width: 32,
-            child: SelectableText(
-              '#${(rowIndex + 1).toString().padLeft(2, '0')}',
-              textAlign: TextAlign.end,
-              style: AppTextStyles.visualizerRowIndex,
-            ),
-          ),
-          const SizedBox(width: 6),
-          ...List.generate(password.length, (charIndex) {
-            final String char = password[charIndex];
-            final isChosen = charIndex == chosenIndex;
-            return VisualizerGridCell(
-              key: ValueKey(charIndex),
-              char: char,
-              isChosen: isChosen,
-              charColor: EntropyHelper.characterColor(char),
-            );
-          }),
-        ],
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(password.length, (charIndex) {
+          final String char = password[charIndex];
+          final isChosen = charIndex == chosenIndex;
+          return VisualizerGridCell(
+            key: ValueKey(charIndex),
+            char: char,
+            isChosen: isChosen,
+            charColor: EntropyHelper.characterColor(char),
+          );
+        }),
       ),
     );
   }
@@ -94,10 +84,14 @@ class VisualizerGridCell extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: isChosen ? AppColors.secondary : AppColors.unchosenBackground,
-        borderRadius: BorderRadius.circular(4),
-        border: isChosen ? Border.all(color: AppColors.chosenBorder) : null,
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        border: isChosen
+            ? const Border.fromBorderSide(
+                BorderSide(color: AppColors.chosenBorder),
+              )
+            : null,
       ),
-      child: SelectableText(
+      child: Text(
         char,
         style: AppTextStyles.visualizerGridChar(
           isChosen: isChosen,

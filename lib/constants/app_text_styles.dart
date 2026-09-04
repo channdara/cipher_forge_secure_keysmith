@@ -12,14 +12,29 @@ class AppTextStyles {
     color: Colors.blueGrey,
   );
 
+  // Cached visualizer cell text styles to avoid per-cell allocations
+  static const TextStyle visualizerGridCharChosen = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: Colors.white,
+  );
+
+  static final Map<Color, TextStyle> _visualizerGridCharCache = {};
+
   static TextStyle visualizerGridChar({
     required bool isChosen,
     required Color charColor,
   }) {
-    return TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 12,
-      color: isChosen ? Colors.white : charColor,
+    if (isChosen) {
+      return visualizerGridCharChosen;
+    }
+    return _visualizerGridCharCache.putIfAbsent(
+      charColor,
+      () => TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 12,
+        color: charColor,
+      ),
     );
   }
 

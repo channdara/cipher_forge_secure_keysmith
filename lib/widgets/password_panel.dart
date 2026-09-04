@@ -88,28 +88,32 @@ class PasswordPanel extends StatelessWidget {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: FadeTransition(
-                  opacity: fadeInController,
-                  child: !_hasPassword
-                      ? const SelectableText(
-                          'Set options to generate',
-                          style: AppTextStyles.outputPlaceholder,
-                          textAlign: TextAlign.center,
-                        )
-                      : Text.rich(
-                          TextSpan(
-                            children: password.split('').map((char) {
-                              return TextSpan(
-                                text: char,
-                                style: AppTextStyles.outputPasswordChar(
-                                  fontSize: isDesktop ? 20 : 16,
-                                  charColor: EntropyHelper.characterColor(char),
-                                ),
-                              );
-                            }).toList(),
+                child: SelectionArea(
+                  child: FadeTransition(
+                    opacity: fadeInController,
+                    child: !_hasPassword
+                        ? const Text(
+                            'Set options to generate',
+                            style: AppTextStyles.outputPlaceholder,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text.rich(
+                            TextSpan(
+                              children: password.split('').map((char) {
+                                return TextSpan(
+                                  text: char,
+                                  style: AppTextStyles.outputPasswordChar(
+                                    fontSize: isDesktop ? 20 : 16,
+                                    charColor: EntropyHelper.characterColor(
+                                      char,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
+                  ),
                 ),
               ),
             ),

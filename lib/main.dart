@@ -16,7 +16,6 @@ class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
     PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
     PointerDeviceKind.trackpad,
     PointerDeviceKind.stylus,
     PointerDeviceKind.unknown,
@@ -190,9 +189,7 @@ class _CipherForgeScreenState extends State<CipherForgeScreen>
                   );
 
               return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
+                physics: const BouncingScrollPhysics(),
                 padding: isDesktop
                     ? const EdgeInsets.all(32.0)
                     : const EdgeInsets.all(16.0),
