@@ -1,7 +1,7 @@
 name: password_generator
 description: "CipherForge: Secure Keysmith"
 publish_to: "none"
-version: 1.0.2+3
+version: 1.1.0+4
 
 environment:
   sdk: ^3.13.1

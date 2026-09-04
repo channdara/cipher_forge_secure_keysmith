@@ -361,23 +361,25 @@ class _SettingsPanelState extends State<SettingsPanel> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: AppColors.poolSizeBorder),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Flexible(
-                  child: SelectableText(
-                    'Pool Size',
-                    style: AppTextStyles.configPoolSizeLabel,
+            child: SelectionArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Flexible(
+                    child: Text(
+                      'Pool Size',
+                      style: AppTextStyles.configPoolSizeLabel,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: SelectableText(
-                    '$_localPoolSize characters',
-                    style: AppTextStyles.configPoolSizeValue,
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      '$_localPoolSize characters',
+                      style: AppTextStyles.configPoolSizeValue,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -25,11 +25,8 @@ class SettingsPanelSwitch extends StatelessWidget {
       elevation: 0,
       clipBehavior: Clip.hardEdge,
       child: SwitchListTile(
-        title: SelectableText(title, style: AppTextStyles.configSwitchTitle),
-        subtitle: SelectableText(
-          subtitle,
-          style: AppTextStyles.configSwitchSubtitle,
-        ),
+        title: Text(title, style: AppTextStyles.configSwitchTitle),
+        subtitle: Text(subtitle, style: AppTextStyles.configSwitchSubtitle),
         value: value,
         onChanged: onChanged,
         activeThumbColor: AppColors.primary,

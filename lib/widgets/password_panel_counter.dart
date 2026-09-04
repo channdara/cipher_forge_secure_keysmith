@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../bloc/password_generator.dart';
+import '../bloc/entropy_helper.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 
@@ -20,14 +20,14 @@ class PasswordPanelCounter extends StatelessWidget {
     var digitCount = 0;
     var symbolCount = 0;
 
-    for (var i = 0; i < password.length; i++) {
-      final String c = password[i];
-      final int code = c.codeUnitAt(0);
+    final int len = password.length;
+    for (var i = 0; i < len; i++) {
+      final int code = password.codeUnitAt(i);
       if (code >= 50 && code <= 57) {
         digitCount++;
       } else if (code >= 65 && code <= 90) {
         uppercaseCount++;
-      } else if (PasswordGenerator.symbolChars.contains(c)) {
+      } else if (EntropyHelper.isSymbolCode(code)) {
         symbolCount++;
       } else {
         lowercaseCount++;

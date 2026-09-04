@@ -15,6 +15,8 @@ class PasswordResult {
 class PasswordGenerator {
   PasswordGenerator._();
 
+  static final Random _random = Random.secure();
+
   static const String uppercaseChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
   static const String lowercaseChars = 'abcdefghijkmnopqrstuvwxyz';
   static const String digitChars = '23456789';
@@ -54,7 +56,6 @@ class PasswordGenerator {
     }
 
     final String allChars = activePools.join();
-    final random = Random.secure();
 
     final List<String> p = [];
 
@@ -65,22 +66,22 @@ class PasswordGenerator {
         final List<int> shuffledIndices = List.generate(
           activePools.length,
           (index) => index,
-        )..shuffle(random);
+        )..shuffle(_random);
         for (var j = 0; j < length; j++) {
           final String pool = activePools[shuffledIndices[j]];
-          w.add(pool[random.nextInt(pool.length)]);
+          w.add(pool[_random.nextInt(pool.length)]);
         }
       } else {
         for (final pool in activePools) {
-          w.add(pool[random.nextInt(pool.length)]);
+          w.add(pool[_random.nextInt(pool.length)]);
         }
         final int remaining = length - activePools.length;
         for (var j = 0; j < remaining; j++) {
-          w.add(allChars[random.nextInt(allChars.length)]);
+          w.add(allChars[_random.nextInt(allChars.length)]);
         }
       }
 
-      w.shuffle(random);
+      w.shuffle(_random);
       p.add(w.join());
     }
 
@@ -89,33 +90,36 @@ class PasswordGenerator {
 
     if (length >= activePools.length) {
       final List<String> shuffledPools = List.from(activePools)
-        ..shuffle(random);
+        ..shuffle(_random);
       final List<int> rowIndices = List.generate(length, (index) => index)
-        ..shuffle(random);
+        ..shuffle(_random);
       final List<int> assignedRows = rowIndices.sublist(0, activePools.length);
 
       for (var j = 0; j < activePools.length; j++) {
         final int row = assignedRows[j];
         final String pool = shuffledPools[j];
+        final String rowString = p[row];
+        final int rowLen = rowString.length;
 
         final List<int> matchingIndices = [];
-        for (var charIdx = 0; charIdx < p[row].length; charIdx++) {
-          if (pool.contains(p[row][charIdx])) {
+        for (var charIdx = 0; charIdx < rowLen; charIdx++) {
+          if (pool.contains(rowString[charIdx])) {
             matchingIndices.add(charIdx);
           }
         }
 
         final int selectedCharIdx =
-            matchingIndices[random.nextInt(matchingIndices.length)];
+            matchingIndices[_random.nextInt(matchingIndices.length)];
         chosenIndices[row] = selectedCharIdx;
-        mChars[row] = p[row][selectedCharIdx];
+        mChars[row] = rowString[selectedCharIdx];
       }
 
       for (var i = 0; i < length; i++) {
         if (chosenIndices[i] == -1) {
-          final int selectedCharIdx = random.nextInt(p[i].length);
+          final String rowString = p[i];
+          final int selectedCharIdx = _random.nextInt(rowString.length);
           chosenIndices[i] = selectedCharIdx;
-          mChars[i] = p[i][selectedCharIdx];
+          mChars[i] = rowString[selectedCharIdx];
         }
       }
     } else {
@@ -126,7 +130,7 @@ class PasswordGenerator {
         final List<int> candidateIndices = [];
         final Set<String> representedPools = {};
         for (var i = 0; i < length; i++) {
-          final int idx = random.nextInt(p[i].length);
+          final int idx = _random.nextInt(p[i].length);
           candidateIndices.add(idx);
           final String char = p[i][idx];
           for (final pool in activePools) {
