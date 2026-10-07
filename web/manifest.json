@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#0B0F19",
     "theme_color": "#6366F1",
-    "description": "A cryptographically secure password generator based on the customized matrix algorithm with cryptographically secure random number generation to construct extremely secure passwords.",
+    "description": "Passwords are generated in the browser with a cryptographically secure random number generator. The matrix shows the selection scheme that assembles each password from those draws.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

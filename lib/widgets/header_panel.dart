@@ -51,7 +51,7 @@ class HeaderPanel extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         const SelectableText(
-          'A cryptographically secure password generator based on the customized matrix algorithm with cryptographically secure random number generation to construct extremely secure passwords.',
+          'Passwords are generated in the browser with a cryptographically secure random number generator. The matrix shows the selection scheme that assembles each password from those draws.',
           style: AppTextStyles.headerDescription,
         ),
       ],

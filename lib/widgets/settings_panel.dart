@@ -81,6 +81,14 @@ class _SettingsPanelState extends State<SettingsPanel> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(SettingsPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.length != oldWidget.length && widget.length != _localLength) {
+      _showLength(widget.length);
+    }
+  }
+
   void _onFocusChange() {
     if (!_focusNode.hasFocus) {
       _validateAndClamp();
@@ -96,47 +104,58 @@ class _SettingsPanelState extends State<SettingsPanel> {
 
   void _handleTextChanged(String text) {
     final int? value = int.tryParse(text);
-    if (value != null && value >= _minLength && value <= _maxLength) {
-      if (_localLength != value) {
-        setState(() {
-          _localLength = value;
-        });
-        _debounceLengthChanged(value);
-      }
+    if (value == null || value < _minLength || value > _maxLength) {
+      _debounceTimer?.cancel();
+      return;
+    }
+    if (_localLength != value) {
+      setState(() {
+        _localLength = value;
+      });
+      _debounceLengthChanged(value);
     }
   }
 
   void _validateAndClamp() {
-    final String text = _controller.text;
-    final int? value = int.tryParse(text);
+    _debounceTimer?.cancel();
+    final int? value = int.tryParse(_controller.text);
+    final int resolved;
     if (value == null) {
-      _updateControllerText(_localLength.toString());
+      resolved = widget.length;
     } else if (value < _minLength) {
-      _updateControllerText(_minLength.toString());
-      if (_localLength != _minLength) {
-        setState(() {
-          _localLength = _minLength;
-        });
-        _debounceTimer?.cancel();
-        widget.onLengthChanged(_minLength);
-      }
+      resolved = _minLength;
     } else if (value > _maxLength) {
-      _updateControllerText(_maxLength.toString());
-      if (_localLength != _maxLength) {
-        setState(() {
-          _localLength = _maxLength;
-        });
-        _debounceTimer?.cancel();
-        widget.onLengthChanged(_maxLength);
-      }
+      resolved = _maxLength;
     } else {
-      if (_localLength != value) {
-        setState(() {
-          _localLength = value;
-        });
-        _debounceTimer?.cancel();
-        widget.onLengthChanged(value);
-      }
+      resolved = value;
+    }
+    setState(() {
+      _localLength = resolved;
+    });
+    if (_controller.text != resolved.toString()) {
+      _updateControllerText(resolved.toString());
+    }
+    if (widget.length != resolved) {
+      widget.onLengthChanged(resolved);
+    }
+  }
+
+  void _stepLength(int delta) {
+    final int next = (_localLength + delta).clamp(_minLength, _maxLength);
+    setState(() {
+      _showLength(next);
+    });
+    if (widget.length != next) {
+      widget.onLengthChanged(next);
+    }
+  }
+
+  void _showLength(int length) {
+    _debounceTimer?.cancel();
+    _localLength = length;
+    final text = length.toString();
+    if (_controller.text != text) {
+      _updateControllerText(text);
     }
   }
 
@@ -191,13 +210,7 @@ class _SettingsPanelState extends State<SettingsPanel> {
                   children: [
                     IconButton(
                       onPressed: _localLength > _minLength
-                          ? () {
-                              setState(() {
-                                _localLength--;
-                                _updateControllerText(_localLength.toString());
-                              });
-                              widget.onLengthChanged(_localLength);
-                            }
+                          ? () => _stepLength(-1)
                           : null,
                       style: IconButton.styleFrom(
                         backgroundColor: AppColors.poolSizeBackground,
@@ -257,13 +270,7 @@ class _SettingsPanelState extends State<SettingsPanel> {
                     const SizedBox(width: 4.0),
                     IconButton(
                       onPressed: _localLength < _maxLength
-                          ? () {
-                              setState(() {
-                                _localLength++;
-                                _updateControllerText(_localLength.toString());
-                              });
-                              widget.onLengthChanged(_localLength);
-                            }
+                          ? () => _stepLength(1)
                           : null,
                       style: IconButton.styleFrom(
                         backgroundColor: AppColors.poolSizeBackground,

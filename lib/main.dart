@@ -152,7 +152,8 @@ class _CipherForgeScreenState extends State<CipherForgeScreen>
                         previous.strength != current.strength ||
                         previous.crackTime != current.crackTime ||
                         previous.entropy != current.entropy ||
-                        previous.isCopied != current.isCopied,
+                        previous.isCopied != current.isCopied ||
+                        previous.copyError != current.copyError,
                     builder: (context, state) {
                       return PasswordPanel(
                         password: state.passwordResult.masterPassword,
@@ -161,6 +162,7 @@ class _CipherForgeScreenState extends State<CipherForgeScreen>
                         crackTime: state.crackTime,
                         entropy: state.entropy,
                         copied: state.isCopied,
+                        copyError: state.copyError,
                         onCopy: () {
                           _bloc.add(const CopyPassword());
                         },
@@ -177,13 +179,15 @@ class _CipherForgeScreenState extends State<CipherForgeScreen>
               final visualizer =
                   BlocBuilder<PasswordGeneratorBloc, PasswordGeneratorState>(
                     buildWhen: (previous, current) =>
-                        previous.passwordResult != current.passwordResult,
+                        previous.passwordResult != current.passwordResult ||
+                        previous.activePoolCount != current.activePoolCount,
                     builder: (context, state) {
                       return VisualizerPanel(
                         alternativePasswords:
                             state.passwordResult.alternativePasswords,
                         chosenIndices: state.passwordResult.chosenIndices,
                         isDesktop: isDesktop,
+                        activePoolCount: state.activePoolCount,
                       );
                     },
                   );
