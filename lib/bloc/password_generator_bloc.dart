@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'copy_failure.dart';
 import 'password_generator.dart';
 import 'password_generator_state.dart';
 
@@ -10,7 +11,12 @@ part 'password_generator_event.dart';
 
 class PasswordGeneratorBloc
     extends Bloc<PasswordGeneratorEvent, PasswordGeneratorState> {
-  PasswordGeneratorBloc() : super(PasswordGeneratorState.initial()) {
+  PasswordGeneratorBloc({
+    Future<void> Function(String text)? writeClipboard,
+    bool? secureContext,
+  }) : _writeClipboard = writeClipboard ?? _writeSystemClipboard,
+       _secureContext = secureContext ?? pageIsSecureContext(),
+       super(PasswordGeneratorState.initial()) {
     on<GeneratePassword>(_onGeneratePassword);
     on<UpdateLength>(_onUpdateLength);
     on<ToggleUppercase>(_onToggleUppercase);
@@ -21,7 +27,14 @@ class PasswordGeneratorBloc
     on<ResetCopiedStatus>(_onResetCopiedStatus);
   }
 
+  final Future<void> Function(String text) _writeClipboard;
+  final bool _secureContext;
+
   Timer? _copiedResetTimer;
+
+  static Future<void> _writeSystemClipboard(String text) {
+    return Clipboard.setData(ClipboardData(text: text));
+  }
 
   void _onGeneratePassword(
     GeneratePassword event,
@@ -34,7 +47,13 @@ class PasswordGeneratorBloc
       useDigits: state.useDigits,
       useSymbols: state.useSymbols,
     );
-    emit(state.copyWith(passwordResult: result, isCopied: false));
+    emit(
+      state.copyWith(
+        passwordResult: result,
+        isCopied: false,
+        clearCopyError: true,
+      ),
+    );
   }
 
   void _onUpdateLength(
@@ -54,6 +73,7 @@ class PasswordGeneratorBloc
         length: clampedLength,
         passwordResult: result,
         isCopied: false,
+        clearCopyError: true,
       ),
     );
   }
@@ -74,6 +94,7 @@ class PasswordGeneratorBloc
         useUppercase: event.useUppercase,
         passwordResult: result,
         isCopied: false,
+        clearCopyError: true,
       ),
     );
   }
@@ -94,6 +115,7 @@ class PasswordGeneratorBloc
         useLowercase: event.useLowercase,
         passwordResult: result,
         isCopied: false,
+        clearCopyError: true,
       ),
     );
   }
@@ -114,6 +136,7 @@ class PasswordGeneratorBloc
         useDigits: event.useDigits,
         passwordResult: result,
         isCopied: false,
+        clearCopyError: true,
       ),
     );
   }
@@ -134,6 +157,7 @@ class PasswordGeneratorBloc
         useSymbols: event.useSymbols,
         passwordResult: result,
         isCopied: false,
+        clearCopyError: true,
       ),
     );
   }
@@ -146,13 +170,33 @@ class PasswordGeneratorBloc
       return;
     }
 
-    await Clipboard.setData(
-      ClipboardData(text: state.passwordResult.masterPassword),
-    );
-
-    emit(state.copyWith(isCopied: true));
-
     _copiedResetTimer?.cancel();
+    _copiedResetTimer = null;
+
+    try {
+      await _writeClipboard(state.passwordResult.masterPassword);
+    } on Object catch (error) {
+      if (emit.isDone) {
+        return;
+      }
+      emit(
+        state.copyWith(
+          isCopied: false,
+          copyError: copyFailureExplanation(
+            error,
+            secureContext: _secureContext,
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (emit.isDone) {
+      return;
+    }
+
+    emit(state.copyWith(isCopied: true, clearCopyError: true));
+
     _copiedResetTimer = Timer(const Duration(seconds: 2), () {
       add(const ResetCopiedStatus());
     });

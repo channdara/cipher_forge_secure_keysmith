@@ -85,6 +85,18 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
   );
 
+  static const TextStyle outputCrackNote = TextStyle(
+    color: AppColors.insightsSubtitle,
+    fontSize: 12,
+    height: 1.35,
+  );
+
+  static const TextStyle outputCopyError = TextStyle(
+    color: AppColors.copyError,
+    fontSize: 12,
+    height: 1.35,
+  );
+
   // Header Text Styles
   static const TextStyle headerTitle = TextStyle(
     fontSize: 28,

@@ -16,6 +16,7 @@ class PasswordPanel extends StatelessWidget {
     required this.crackTime,
     required this.entropy,
     required this.copied,
+    required this.copyError,
     required this.onCopy,
     required this.onGenerate,
     required this.generateIconController,
@@ -29,6 +30,7 @@ class PasswordPanel extends StatelessWidget {
   final String crackTime;
   final double entropy;
   final bool copied;
+  final String? copyError;
   final VoidCallback onCopy;
   final VoidCallback onGenerate;
   final AnimationController generateIconController;
@@ -39,6 +41,20 @@ class PasswordPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? copyError = this.copyError;
+    final copyFailed = copyError != null;
+    Color copyBackground = AppColors.copyButtonBackground;
+    IconData copyIcon = Icons.copy_rounded;
+    var copyLabel = 'Copy to Clipboard';
+    if (copyFailed) {
+      copyBackground = AppColors.copyErrorBackground;
+      copyIcon = Icons.error_outline_rounded;
+      copyLabel = 'Copy failed';
+    } else if (copied) {
+      copyBackground = Colors.green;
+      copyIcon = Icons.check_rounded;
+      copyLabel = 'Copied!';
+    }
     return CustomCard(
       padding: isDesktop ? 32 : 16,
       borderRadiusTopLeft: isDesktop ? 8 : 32,
@@ -125,16 +141,11 @@ class PasswordPanel extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: _hasPassword ? onCopy : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: copied
-                        ? Colors.green
-                        : AppColors.copyButtonBackground,
+                    backgroundColor: copyBackground,
                     foregroundColor: Colors.white,
                   ),
-                  icon: Icon(
-                    copied ? Icons.check_rounded : Icons.copy_rounded,
-                    size: 16,
-                  ),
-                  label: Text(copied ? 'Copied!' : 'Copy to Clipboard'),
+                  icon: Icon(copyIcon, size: 16),
+                  label: Text(copyLabel),
                 ),
               ),
               const SizedBox(width: 8),
@@ -152,19 +163,26 @@ class PasswordPanel extends StatelessWidget {
               ),
             ],
           ),
+          if (copyError != null) ...[
+            const SizedBox(height: 8),
+            Semantics(
+              liveRegion: true,
+              child: Text(copyError, style: AppTextStyles.outputCopyError),
+            ),
+          ],
           if (_hasPassword) ...[
             const SizedBox(height: 32),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SelectableText(
-                  'Entropy: ~${entropy.toStringAsFixed(0)} bits',
+                  'Entropy: ~${entropy.toStringAsFixed(1)} bits',
                   style: AppTextStyles.outputEntropy,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: SelectableText(
-                    'Crack Time: ~$crackTime',
+                    'Offline attack: ~$crackTime',
                     style: AppTextStyles.outputCrackTime,
                     textAlign: TextAlign.end,
                   ),
@@ -173,6 +191,11 @@ class PasswordPanel extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             PasswordPanelBar(strength: strength, color: strengthColor),
+            const SizedBox(height: 12),
+            const Text(
+              '10 billion guesses per second, stopping halfway, if the attacker knows the length and character classes. A rate-limited login is much slower. A fast hash on a large cluster can be faster.',
+              style: AppTextStyles.outputCrackNote,
+            ),
             const SizedBox(height: 24),
             PasswordPanelCounter(isDesktop: isDesktop, password: password),
           ],

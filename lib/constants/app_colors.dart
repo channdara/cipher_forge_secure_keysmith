@@ -32,6 +32,8 @@ class AppColors {
   static const Color innerCardBackground = Color(0xFF0F172A);
   static const Color innerCardBorder = Color(0xFF334155);
   static const Color copyButtonBackground = Color(0xFF1E293B);
+  static const Color copyError = Color(0xFFF87171);
+  static const Color copyErrorBackground = Color(0xFF991B1B);
   static const Color barBackground = Color(0xFF334155);
 
   // Header Widget

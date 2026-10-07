@@ -10,17 +10,35 @@ class VisualizerPanel extends StatefulWidget {
     required this.alternativePasswords,
     required this.chosenIndices,
     required this.isDesktop,
+    required this.activePoolCount,
   });
 
   final List<String> alternativePasswords;
   final List<int> chosenIndices;
   final bool isDesktop;
+  final int activePoolCount;
 
   @override
   State<VisualizerPanel> createState() => _VisualizerPanelState();
 }
 
 class _VisualizerPanelState extends State<VisualizerPanel> {
+  String _insight(int length) {
+    final int classes = widget.activePoolCount;
+    if (classes <= 1) {
+      return 'The matrix builds $length intermediate keys of length $length. '
+          'One character is taken from a random position in each key. '
+          'Violet cells are the characters in the password.';
+    }
+    return 'The matrix builds $length intermediate keys of length $length. '
+        'Each key includes at least one character from every selected class, '
+        'then is shuffled. One character is taken from each key. '
+        '$classes keys are assigned to those classes, and the character taken '
+        'from an assigned key is chosen only from that class. '
+        'Every other key contributes a character from any position. '
+        'Violet cells are the characters in the password.';
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.alternativePasswords.isEmpty) {
@@ -53,10 +71,7 @@ class _VisualizerPanelState extends State<VisualizerPanel> {
             ],
           ),
           const SizedBox(height: 8),
-          SelectableText(
-            'The matrix generates $len intermediate keys of length $len. One random character from each row forms the master key. The violet cells represent characters selected for the Master Key.',
-            style: AppTextStyles.visualizerInsight,
-          ),
+          SelectableText(_insight(len), style: AppTextStyles.visualizerInsight),
           const SizedBox(height: 14),
           RepaintBoundary(
             child: SingleChildScrollView(

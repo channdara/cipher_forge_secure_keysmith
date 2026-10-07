@@ -1,0 +1,3 @@
+scripts:
+  push:
+    device: 'flutter clean && adb shell rm -rf /sdcard/Projects/cipher_forge_secure_keysmith/* && adb push . /sdcard/Projects/cipher_forge_secure_keysmith/ && flutter pub get'

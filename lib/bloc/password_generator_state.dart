@@ -12,6 +12,7 @@ class PasswordGeneratorState {
     required this.useSymbols,
     required this.passwordResult,
     required this.isCopied,
+    this.copyError,
     required this.poolSize,
     required this.entropy,
     required this.strength,
@@ -26,6 +27,7 @@ class PasswordGeneratorState {
     required bool useSymbols,
     required PasswordResult passwordResult,
     bool isCopied = false,
+    String? copyError,
   }) {
     final int poolSize = EntropyHelper.getPoolSize(
       useUppercase: useUppercase,
@@ -33,7 +35,13 @@ class PasswordGeneratorState {
       useDigits: useDigits,
       useSymbols: useSymbols,
     );
-    final double entropy = EntropyHelper.calculateEntropy(length, poolSize);
+    final double entropy = EntropyHelper.calculateEntropy(
+      length: length,
+      useUppercase: useUppercase,
+      useLowercase: useLowercase,
+      useDigits: useDigits,
+      useSymbols: useSymbols,
+    );
     final PasswordStrength strength = EntropyHelper.getStrength(entropy);
     final String crackTime = EntropyHelper.getCrackTimeEstimate(entropy);
 
@@ -45,6 +53,7 @@ class PasswordGeneratorState {
       useSymbols: useSymbols,
       passwordResult: passwordResult,
       isCopied: isCopied,
+      copyError: copyError,
       poolSize: poolSize,
       entropy: entropy,
       strength: strength,
@@ -84,6 +93,7 @@ class PasswordGeneratorState {
   final bool useSymbols;
   final PasswordResult passwordResult;
   final bool isCopied;
+  final String? copyError;
   final int poolSize;
   final double entropy;
   final PasswordStrength strength;
@@ -97,6 +107,8 @@ class PasswordGeneratorState {
     bool? useSymbols,
     PasswordResult? passwordResult,
     bool? isCopied,
+    String? copyError,
+    bool clearCopyError = false,
   }) {
     return PasswordGeneratorState.create(
       length: length ?? this.length,
@@ -106,7 +118,25 @@ class PasswordGeneratorState {
       useSymbols: useSymbols ?? this.useSymbols,
       passwordResult: passwordResult ?? this.passwordResult,
       isCopied: isCopied ?? this.isCopied,
+      copyError: clearCopyError ? null : copyError ?? this.copyError,
     );
+  }
+
+  int get activePoolCount {
+    var count = 0;
+    if (useUppercase) {
+      count++;
+    }
+    if (useLowercase) {
+      count++;
+    }
+    if (useDigits) {
+      count++;
+    }
+    if (useSymbols) {
+      count++;
+    }
+    return count;
   }
 
   Color strengthColor() {
